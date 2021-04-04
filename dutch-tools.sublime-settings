@@ -1,0 +1,17 @@
+{
+
+  "draw_indent_guides": false,
+  "line_numbers": true,
+  "gutter": true,
+  "margin": 2,
+  "tab_size": 4,
+  "translate_tabs_to_spaces": true,
+  "use_tab_stops": false,
+  "match_brackets": true,
+  "fold_buttons": true,
+  "fade_fold_buttons": false,
+  "extensions":
+  [
+    "test"
+  ]
+}
