@@ -20,4 +20,4 @@ The AnkiConnect plugin (https://ankiweb.net/shared/info/2055492159) should be in
 ```
 
 4. Then write down your fields in CSV format, separated with semi-column
-5. Press <F11> to send currently selected line to Anki
+5. Press "F11" key to send currently selected line to Anki
