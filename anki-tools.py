@@ -78,25 +78,58 @@ def invoke(action, **params):
     return response['result']
 
 
-def prepare_note(view, edit, nl, en, ru, tags, tr):
+def get_config(view, edit):
+
+    def extract_config(s):
+        m = re.match("^\s*#\s*(\w+)\s*[:=]\s*(.*)$", s)
+        if m:
+            return m.group(1), m.group(2)
+
+    lines = view.find_all("^\s*#\s*\w+\s*[:=]\s*.*$")
+    return dict([extract_config(view.substr(line)) for line in lines])
+
+
+def prepare_note(fields, config):
+    def get_field(idx, name):
+        return (name), fields[idx]
+
+    def get_tags_list():
+        if 'tags' in fields_dict:
+            tags_value = fields_dict.get(tags_field_name)
+            if tags_value:
+                return re.split("[, ]", tags_value)
+            else:
+                return []
+
+    if 'deck' not in config:
+        raise Exception("No 'deck' configuration found")
+    if 'model' not in config:
+        raise Exception("No 'model' configuration found")
+    if 'fields' not in config:
+        raise Exception("No 'fields' configuration found")
+
+    fields_order = re.split("[;, :]", config['fields'])
+    print(fields_order)
+    fields_dict = dict([get_field(idx, name) for idx, name in enumerate(fields_order)])
+
+    tags_field_name = config.get('tags', 'Tags')
+
+    tags_list = get_tags_list()
+    del fields_dict[tags_field_name]
+
     return {
-        "deckName": "Dutch-Russian::Woorden::B1",
-        "modelName": "Dutch",
-        "fields": {
-            "Nederlands": nl,
-            "English": en,
-            "Russian": ru,
-            "Transcription": tr
-        },
+        "deckName": config['deck'],
+        "modelName": config['model'],
+        "fields": fields_dict,
         "options": {
             "allowDuplicate": False,
             "duplicateScope": "deck",
             "duplicateScopeOptions": {
-                "deckName": "Dutch-Russian::Woorden::B1",
+                "deckName": config['deck'],
                 "checkChildren": False
             }
         },
-        "tags": tags.split(' ')
+        "tags": tags_list
     }
 
 
@@ -113,6 +146,8 @@ class SendToAnkiCommand(sublime_plugin.TextCommand):
         def on_done(value):
             print(value)
 
+        config = get_config(self.view, edit)
+
         try:
             panel = self.view.window().find_output_panel("local_vars")
             selection = self.view.sel()
@@ -124,7 +159,8 @@ class SendToAnkiCommand(sublime_plugin.TextCommand):
                     if len(fields) < 5:
                         print_in_panel(self.view, edit, "Not enough fields (%d) for %s" % (len(fields), fields))
                     else:
-                        note = prepare_note(self.view, edit, fields[0], fields[3], fields[4], fields[1], fields[2])
+                        note = prepare_note(fields, config)
+                        print_in_panel(self.view, edit, "Note: " + str(note))
                         result = invoke('addNote', note=note)
                         print_in_panel(self.view, edit, "Created note %s for %s" % (result, fields))
 

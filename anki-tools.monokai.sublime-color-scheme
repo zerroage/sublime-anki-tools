@@ -1,0 +1,127 @@
+{
+    "name": "Monokai",
+    "author": "Sublime HQ Pty Ltd, Wimer Hazenberg",
+    "variables":
+    {
+        "black": "hsl(0, 0%, 0%)",
+        "black2": "hsl(60, 17%, 11%)",
+        "black3": "hsl(70, 8%, 15%)",
+        "blue": "hsl(190, 81%, 67%)",
+        "grey": "hsl(55, 8%, 26%)",
+        "orange": "hsl(32, 98%, 56%)",
+        "orange2": "hsl(30, 83%, 34%)",
+        "orange3": "hsl(47, 100%, 79%)",
+        "purple": "hsl(261, 100%, 75%)",
+        "red": "hsl(0, 93%, 59%)",
+        "red2": "hsl(338, 95%, 56%)",
+        "white": "hsl(0, 0%, 97%)",
+        "white2": "hsl(60, 36%, 96%)",
+        "white3": "hsl(60, 30%, 96%)",
+        "yellow": "hsl(54, 70%, 68%)",
+        "yellow2": "hsl(80, 76%, 53%)",
+        "yellow3": "hsl(60, 12%, 79%)",
+        "yellow4": "hsl(55, 11%, 22%)",
+        "yellow5": "hsl(50, 11%, 41%)"
+    },
+    "globals":
+    {
+        // "foreground": "var(white3)",
+        "background": "var(black3)",
+        "caret": "color(var(white2) alpha(0.9))",
+        "block_caret": "color(var(white2) alpha(0.4))",
+        "invisibles": "color(var(white3) alpha(0.35))",
+        "line_highlight": "var(yellow4)",
+        "selection": "var(grey)",
+        "selection_border": "var(black2)",
+        "misspelling": "var(red2)",
+        "active_guide": "color(var(orange2) alpha(0.69))",
+        "find_highlight_foreground": "var(black)",
+        "find_highlight": "var(orange3)",
+        "brackets_options": "underline",
+        "brackets_foreground": "color(var(white3) alpha(0.65))",
+        "bracket_contents_options": "underline",
+        "bracket_contents_foreground": "color(var(white3) alpha(0.65))",
+        "tags_options": "stippled_underline"
+    },
+    "rules":
+    [
+        {
+            "name": "Field 1",
+            "scope": "field1",
+            "foreground": "gold"
+        },
+        {
+            "name": "Field 2",
+            "scope": "field2",
+            "foreground": "lightskyblue"
+        },
+        {
+            "name": "Field 3",
+            "scope": "field3",
+            "foreground": "indianred"
+        },
+        {
+            "name": "Field 4",
+            "scope": "field4",
+            "foreground": "turquoise"
+        },
+        {
+            "name": "Field 5",
+            "scope": "field5",
+            "foreground": "lime"
+        },
+        {
+            "name": "Field 6",
+            "scope": "field6",
+            "foreground": "linen"
+        },
+        {
+            "name": "Field 7",
+            "scope": "field7",
+            "foreground": "darkorange"
+        },
+        {
+            "name": "Field 8",
+            "scope": "field8",
+            "foreground": "grey"
+        },
+        {
+            "name": "Field 9",
+            "scope": "field9",
+            "foreground": "salmon"
+        },
+        {
+            "name": "Field 10",
+            "scope": "field10",
+            "foreground": "cornflowerblue"
+        },
+        {
+            "name": "Config name",
+            "scope": "config.name",
+            "foreground": "ghostwhite",
+            "font_style": "bold"
+        },
+        {
+            "name": "Config value",
+            "scope": "config.value",
+            "foreground": "limegreen",
+            "font_style": "bold"
+        },
+        {
+            "name": "Comment",
+            "scope": "comment",
+            "foreground": "var(grey)",
+            "font_style": "italic"
+        },
+        {
+            "name": "String",
+            "scope": "string",
+            "foreground": "var(yellow)"
+        },
+        {
+            "name": "Number",
+            "scope": "constant.numeric",
+            "foreground": "var(purple)"
+        },
+    ]
+}

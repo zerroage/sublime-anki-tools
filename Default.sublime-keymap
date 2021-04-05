@@ -1,5 +1,5 @@
 [
-  { "keys": ["f5"], "command": "get_transcription", "context": [{ "key": "selector", "operator": "equal", "operand": "source.dutch-tools" }] },
-  { "keys": ["f11"], "command": "send_to_anki", "context": [{ "key": "selector", "operator": "equal", "operand": "source.dutch-tools" }] },
-  { "keys": ["f1"], "command": "show_help", "context": [{ "key": "selector", "operator": "equal", "operand": "source.dutch-tools" }] },
+  { "keys": ["f5"], "command": "get_transcription", "context": [{ "key": "selector", "operator": "equal", "operand": "source.anki-tools" }] },
+  { "keys": ["f11"], "command": "send_to_anki", "context": [{ "key": "selector", "operator": "equal", "operand": "source.anki-tools" }] },
+  { "keys": ["f1"], "command": "show_help", "context": [{ "key": "selector", "operator": "equal", "operand": "source.anki-tools" }] },
 ]

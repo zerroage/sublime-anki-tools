@@ -1,0 +1,126 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - anki
+scope: source.anki-tools
+
+contexts:
+  # The prototype context is prepended to all contexts but those setting
+  # meta_include_prototype: false.
+  prototype:
+    - include: comments
+
+  main:
+    # The main context is the initial starting point of our syntax.
+    # Include other contexts from here (or specify them directly).
+    - include: strings
+
+  strings:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character.
+    - match: '^\s*#'
+      scope: source.anki-tools.comment
+      push: comment-or-config
+    - match: '^'
+      scope: source.anki-tools.fields
+      push: field1
+
+  field1:
+    - meta_include_prototype: false
+    - meta_scope: field1
+    - match: ';'
+      scope: source.anki-tools.comment
+      push: field2
+    - match: '$'
+      pop: true
+
+  field2:
+    - meta_include_prototype: false
+    - meta_scope: field2
+    - match: ';'
+      push: field3
+    - match: '$'
+      pop: true
+
+  field3:
+    - meta_include_prototype: false
+    - meta_scope: field3
+    - match: ';'
+      push: field4
+    - match: '$'
+      pop: true
+
+  field4:
+    - meta_include_prototype: false
+    - meta_scope: field4
+    - match: ';'
+      push: field5
+    - match: '$'
+      pop: true
+
+  field5:
+    - meta_include_prototype: false
+    - meta_scope: field5
+    - match: ';'
+      push: field6
+    - match: '$'
+      pop: true
+
+  field6:
+    - meta_include_prototype: false
+    - meta_scope: field6
+    - match: ';'
+      push: field7
+    - match: '$'
+      pop: true
+
+  field7:
+    - meta_include_prototype: false
+    - meta_scope: field7
+    - match: ';'
+      push: field8
+    - match: '$'
+      pop: true
+
+  field8:
+    - meta_include_prototype: false
+    - meta_scope: field8
+    - match: ';'
+      push: field9
+    - match: '$'
+      pop: true
+
+  field9:
+    - meta_include_prototype: false
+    - meta_scope: field9
+    - match: ';'
+      push: field10
+    - match: '$'
+      pop: true
+
+  field10:
+    - meta_include_prototype: false
+    - meta_scope: field10
+    - match: ';'
+    - match: '$'
+      pop: true
+
+  comment-or-config:
+    - meta_scope: comment
+    - match: '\b\w+\s*[:=]'
+      push: config-name
+    - match: '$'
+      pop: true
+
+  config-name:
+    - meta_scope: config.name
+    - match: '\b'
+      push: config-value
+    - match: '$'
+      pop: true
+
+  config-value:
+    - meta_scope: config.value
+    - match: '$'
+      pop: true
