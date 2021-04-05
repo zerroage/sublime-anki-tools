@@ -91,10 +91,13 @@ def get_config(view, edit):
 
 def prepare_note(fields, config):
     def get_field(idx, name):
-        return (name), fields[idx]
+        if idx < len(fields):
+            return name, fields[idx]
+        else:
+            return name, ''
 
     def get_tags_list():
-        if 'tags' in fields_dict:
+        if tags_field_name in fields_dict:
             tags_value = fields_dict.get(tags_field_name)
             if tags_value:
                 return re.split("[, ]", tags_value)
@@ -109,13 +112,13 @@ def prepare_note(fields, config):
         raise Exception("No 'fields' configuration found")
 
     fields_order = re.split("[;, :]", config['fields'])
-    print(fields_order)
     fields_dict = dict([get_field(idx, name) for idx, name in enumerate(fields_order)])
 
     tags_field_name = config.get('tags', 'Tags')
-
     tags_list = get_tags_list()
-    del fields_dict[tags_field_name]
+
+    if tags_field_name in fields_dict:
+        del fields_dict[tags_field_name]
 
     return {
         "deckName": config['deck'],
@@ -143,9 +146,6 @@ class SendToAnkiCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
 
-        def on_done(value):
-            print(value)
-
         config = get_config(self.view, edit)
 
         try:
@@ -156,21 +156,18 @@ class SendToAnkiCommand(sublime_plugin.TextCommand):
                     line = self.view.line(sel)
                     # view.insert(edit, line.b, ";" + transcription)
                     fields = [s for s in self.view.substr(line).split(';') if s != '']
-                    if len(fields) < 5:
+                    min_fields = int(config.get('min-fields', 2))
+
+                    if len(fields) < min_fields:
                         print_in_panel(self.view, edit, "Not enough fields (%d) for %s" % (len(fields), fields))
                     else:
                         note = prepare_note(fields, config)
-                        print_in_panel(self.view, edit, "Note: " + str(note))
+                        print("Sending note: %s" % note)
                         result = invoke('addNote', note=note)
                         print_in_panel(self.view, edit, "Created note %s for %s" % (result, fields))
 
                         selection.clear()
                         selection.add(sublime.Region(line.end() + 1, line.end() + 1))
-                    # print_in_panel(self.view, edit, str(t))
-                    # self.view.show_popup_menu(fields, lambda v: on_done(fields[v]))
-
-            # result = invoke('addNote', note=prepare_note(self.view, edit))
-            # self.view.show_popup("<b>Result</b><br>" + str(result), sublime.HIDE_ON_MOUSE_MOVE_AWAY)
         except Exception as e:
             print_in_panel(self.view, edit, "*** Error:" + str(e))
 
@@ -192,5 +189,3 @@ Fields order: <ul>
 <li>Russian
 </ul>
 """, 0, -1, 500, 300)
-
-# show_popup(content, <flags>, <location>, <max_width>, <max_height>, <on_navigate>, <on_hide>)
