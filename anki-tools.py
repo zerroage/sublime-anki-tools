@@ -20,7 +20,7 @@ def print_in_panel(view, edit, text):
 def get_transcription(word):
     # html = urlopen("https://www.mijnwoordenboek.nl/vertaal/NL/EN/%s" % word)
     # content = html.read()
-    r = requests.get("https://www.mijnwoordenboek.nl/vertaal/NL/EN/%s" % word)
+    r = requests.get("https://www.mijnwoordenboek.nl/vertaal/NL/EN/%s" % word, verify=False)
     # print("Enconding: " + r.encoding)
     soup = bs4.BeautifulSoup(r.text, 'html.parser')
     tag = soup.find("td", class_="smallcaps", string=re.compile("Uitspraak.*"))
@@ -172,15 +172,47 @@ class SendToAnkiCommand(sublime_plugin.TextCommand):
             print_in_panel(self.view, edit, "*** Error:" + str(e))
 
 
+class SelectTextForTranslationCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit):
+        selection = self.view.sel()
+        if selection:
+            regions = self.view.find_all(pattern="^(.*?)[\(\/;,]")
+            regions_in_selection = [r for r in regions if selection.contains(r)]
+            selection.clear()
+            for region in regions_in_selection:
+                region.b -= 1
+                selection.add(region)
+class AddTrailingSeparatorCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit):
+        selection = self.view.sel()
+        if selection and len(selection) > 0:
+            sel = selection[0]
+            lines = self.view.lines(sel)
+            offset = 0
+            for line in lines:
+                if line.begin() < line.end():
+                    ending = self.view.substr(line.end() - 1 + offset)
+                    if ending != ';':
+                        self.view.insert(edit, line.end() + offset, ";")
+                        offset += 1
+
+
 class ShowHelpCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         self.view.show_popup("""
+        <div style="color: gray">
 <h3>Help</h3>
------------------<br>
-F5: get transcription<br>
-F11: send to Anki<br>
------------------<br>
+----------------------------------<br>
+<b>F5</b>: get transcription<br>
+<b>F6</b>: select words for translation <br>
+&nbsp;&nbsp;&nbsp;&nbsp;(works with selection only)<br>
+<b>F7</b>: add trailing semi-columns <br>
+&nbsp;&nbsp;&nbsp;&nbsp;(works with selection only)<br>
+<b>F11</b>: send line to Anki<br>
+----------------------------------<br>
 Fields order: <ul>
 <li>Nederlands
 <li>Tags (space separated)
@@ -188,4 +220,5 @@ Fields order: <ul>
 <li>English
 <li>Russian
 </ul>
+</div>
 """, 0, -1, 500, 300)
